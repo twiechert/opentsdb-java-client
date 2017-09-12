@@ -79,19 +79,23 @@ public class PoolingHttpClient {
 		}
 	};
 
-	public PoolingHttpClient() {
+    public PoolingHttpClient() {
+		// config timeout
+		this(RequestConfig.custom()
+				.setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT_MILLISECONDS)
+				.setConnectionRequestTimeout(DEFAULT_WAIT_TIMEOUT_MILLISECONDS)
+				.setSocketTimeout(DEFAULT_READ_TIMEOUT_MILLISECONDS).build());
+    }
+
+
+	public PoolingHttpClient(RequestConfig config) {
 		// Increase max total connection
 		connManager.setMaxTotal(maxTotalConnections);
 		// Increase default max connection per route
 		connManager.setDefaultMaxPerRoute(maxConnectionsPerRoute);
 
-		// config timeout
-		RequestConfig config = RequestConfig.custom()
-				.setConnectTimeout(connectTimeout)
-				.setConnectionRequestTimeout(waitTimeout)
-				.setSocketTimeout(readTimeout).build();
-
 		httpClient = HttpClients.custom()
+				.useSystemProperties()
 				.setKeepAliveStrategy(keepAliveStrategy)
 				.setConnectionManager(connManager)
 				.setDefaultRequestConfig(config).build();
