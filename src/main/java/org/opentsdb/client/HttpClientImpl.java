@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.log4j.Logger;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.ErrorDetail;
@@ -25,14 +26,24 @@ public class HttpClientImpl implements HttpClient {
 
 	private Gson mapper;
 
-	PoolingHttpClient httpClient = new PoolingHttpClient();
+	PoolingHttpClient httpClient;
 
 	public HttpClientImpl(String serviceUrl) {
+		httpClient  = new PoolingHttpClient();
 		this.serviceUrl = serviceUrl;
 
 		GsonBuilder builder = new GsonBuilder();
 		mapper = builder.create();
 	}
+
+
+	public HttpClientImpl(String serviceUrl, RequestConfig requestConfig) {
+		httpClient  = new PoolingHttpClient();
+		this.serviceUrl = serviceUrl;
+		GsonBuilder builder = new GsonBuilder();
+		mapper = builder.create();
+	}
+
 
 	@Override
 	public Response pushMetrics(MetricBuilder builder) throws IOException {
