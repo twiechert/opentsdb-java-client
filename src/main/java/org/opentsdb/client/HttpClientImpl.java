@@ -38,7 +38,7 @@ public class HttpClientImpl implements HttpClient {
 
 
 	public HttpClientImpl(String serviceUrl, RequestConfig requestConfig) {
-		httpClient  = new PoolingHttpClient();
+		httpClient  = new PoolingHttpClient(requestConfig);
 		this.serviceUrl = serviceUrl;
 		GsonBuilder builder = new GsonBuilder();
 		mapper = builder.create();
